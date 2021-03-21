@@ -24,6 +24,11 @@ map.addControl(
 var nav = new mapboxgl.NavigationControl()
 map.addControl(nav,'top-left')
 
+var popup = new mapboxgl.Popup({
+  closeButton: false,
+  closeOnClick: false
+});
+
 // load map the first time
 map.on('style.load',function() {
   map.addSource('black-carbon', {
@@ -65,6 +70,12 @@ function updateElements(){
   if (map.getSource('black-carbon')) {
     map.removeSource('black-carbon');
   }
+  if (map.getLayer('highlight-line')) {
+    map.removeLayer('highlight-line');
+  }
+  if (map.getSource('highlight-feature')) {
+    map.removeSource('highlight-feature');
+  }
 
   map.addSource('black-carbon', {
       type: 'geojson',
@@ -93,6 +104,59 @@ function updateElements(){
       'fill-outline-color': '#ccc',
       'fill-opacity': 0.7
     }
+  })
+
+  map.addSource('highlight-feature', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  })
+
+  map.addLayer({
+    id: 'highlight-line',
+    type: 'fill',
+    source: 'highlight-feature',
+    paint: {
+      'fill-color': '#ccc',
+      'fill-opacity': 0.7,
+      'fill-outline-color': 'white'
+    }
+  });
+
+  map.on('mousemove', function (e) {
+
+    var features = map.queryRenderedFeatures(e.point, {
+        layers: ['blackCarbonMean'],
+    });
+
+    if (features.length > 0) {
+
+      var hoveredFeature = features[0];
+      var name = hoveredFeature.properties.BoroCD;
+      var mean = hoveredFeature.properties.Winter2012;
+
+      var popupContent = `
+        <div>
+          ${name}<br/>
+          <b>Black Carbon Levels</b><br/>
+          Mean: ${mean}<br/>
+        </div>
+      `
+
+      popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+      map.getSource('highlight-feature').setData(hoveredFeature.geometry);
+      map.getCanvas().style.cursor = 'pointer';
+    } else {
+      popup.remove();
+      map.getCanvas().style.cursor = '';
+      map.getSource('highlight-feature').setData({
+            "type": "FeatureCollection",
+            "features": []
+        });
+    }
+
   })
 
   console.log(dataTimestamp+'B')
