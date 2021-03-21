@@ -134,11 +134,15 @@ function formatDateBadly(date) {
     return summer(date.getMonth()) + date.getFullYear();
 }
 
+dateValue = document.getElementById('sliderValue')
+
 // listens to updates in real time and returns the slider value
 slider.noUiSlider.on('update',function (values, handle) {
   if (handle === 0) {
     sliderTimestamp = formatDateNicely(new Date(+values[handle]))
     dataTimestamp = formatDateBadly(new Date(+values[handle]))
+    dateValue.innerHTML = sliderTimestamp
+    // returns slider value into html siderbar
     console.log(dataTimestamp+'A')
     updateElements()
   }
