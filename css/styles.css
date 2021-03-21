@@ -1,0 +1,37 @@
+html, body, #sidebar, #mapContainer, .main-container {
+  margin: 0;
+  font-family: 'Trebuchet MS', sans-serif;
+  color: #C5C6C7;
+}
+
+html, body {
+  height:100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  width: 100%;
+  overflow-y: hidden;
+}
+
+#sidebar {
+  background-color: #1F2833;
+  overflow-y: scroll;
+  width:400px;
+}
+
+#sidebarContent, #slider {
+  margin:16px;
+}
+
+#mapContainer {
+  background-color: #66FCF1;
+  flex-grow:1;
+}
