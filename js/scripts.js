@@ -195,9 +195,8 @@ function updateElements(){
 
       var popupContent = `
         <div>
-          ${name}<br/>
-          <b>Black Carbon Levels</b><br/>
-          Mean: ${mean}<br/>
+          <b>${name}</b><br/>
+          Mean Absorbance Unit: ${mean}<br/>
         </div>
       `
 
