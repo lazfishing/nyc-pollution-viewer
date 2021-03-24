@@ -35,25 +35,25 @@
 
         <div class="btn-group-vertical" role="group">
           <button type="button" class="btn btn-secondary active" id='bc-button'>Black Carbon</button>
-          <button type="button" class="btn btn-secondary" id='no-button'>Nitric Oxide</button>
+          <button type="button" class="btn btn-secondary" id='no-button'>Nitric Oxide (NO)</button>
+          <button type="button" class="btn btn-secondary" id='pm-button'>Particulate Matter (PM2.5)</button>
         </div><br/>
 
         <br/><p>View the pollution levels across years by dragging the slider</p>
         <div id="slider"></div>
         <p>You are viewing data for: <span id='sliderValue' style="color:#66FCF1"></p>
 
-          <br/><div id="legend" class="legend">
-            <p>Black Carbon: <br/>Absorbance units</p>
-            <div><span style="background-color: #ffefdc"></span> 0.2</div>
-            <div><span style="background-color: #f5c5ab"></span> 0.4</div>
-            <div><span style="background-color: #f1b093"></span> 0.6</div>
-            <div><span style="background-color: #e78662"></span> 0.8</div>
-            <div><span style="background-color: #e27149"></span> 1.0</div>
-            <div><span style="background-color: #d15e3d"></span> 1.2</div>
-            <div><span style="background-color: #b13925"></span> 1.4</div>
-            <div><span style="background-color: #a02619"></span> 1.6</div>
-            <div><span style="background-color: #7f0101"></span> 1.8</div>
-            <div><span style="background-color: #660202"></span> 2.0</div>
+          <div class='my-legend' id='legend'>
+          <div class='legend-title'>Black Carbon: <br/>Absorbance units</div>
+          <div class='legend-scale'>
+            <ul class='legend-labels'>
+              <li><span style='background:#ffefdc;'></span>0.2</li>
+              <li><span style='background:#f1b093;'></span>0.6</li>
+              <li><span style='background:#e27149;'></span>1.0</li>
+              <li><span style='background:#b13925;'></span>1.4</li>
+              <li><span style='background:#7f0101;'></span>1.8</li>
+            </ul>
+          </div>
           </div>
 
       </div>

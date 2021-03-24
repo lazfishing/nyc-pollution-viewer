@@ -79,6 +79,7 @@ map.on('style.load',function() {
       data: 'data/nitric-oxide.geojson'
   });
 
+  // iterate through data available for all timestamps
   for (i = 0; i < timeSteps.length; i++) {
     map.addLayer({
       'id':timeSteps[i].concat('no'),
@@ -100,6 +101,41 @@ map.on('style.load',function() {
           56,'#a02619',
           63,'#7f0101',
           70,'#660202'
+          ],
+        'fill-outline-color': '#ccc',
+        'fill-opacity': 0.6
+      }
+    })
+  }
+
+  // add particulate matter data
+  map.addSource('particulate-matter', {
+      type: 'geojson',
+      data: 'data/particulate-matter.geojson'
+  });
+
+  // iterate through data available for all timestamps
+  for (i = 0; i < timeSteps.length; i++) {
+    map.addLayer({
+      'id':timeSteps[i].concat('pm'),
+      'type': 'fill',
+      'source': 'particulate-matter',
+      'layout': {'visibility': 'none'},
+      'paint': {
+        'fill-color':
+          ['interpolate',
+          ['linear'],
+          ['get', timeSteps[i]],
+          6.0,'#ffefdc',
+          7.0,'#f5c5ab',
+          8.0,'#f1b093',
+          9.0,'#e78662',
+          10.0,'#e27149',
+          11.0,'#d15e3d',
+          12.0,'#b13925',
+          13.0,'#a02619',
+          14.0,'#7f0101',
+          15.0,'#660202'
           ],
         'fill-outline-color': '#ccc',
         'fill-opacity': 0.6
@@ -228,24 +264,22 @@ $('#no-button').on('click', function(event) {
   console.log('no button clicked');
   $(this).addClass('active');
   $('#bc-button').removeClass('active');
+  $('#no-button').removeClass('active');
   event.preventDefault();
   event.stopPropagation();
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
 
   var legendContent = `
-  <div id="legend" class="legend">
-    <p>Nitric Oxide (NO): <br/>Units of parts per billion (ppb)</p>
-    <div><span style="background-color: #ffefdc"></span> 7.0</div>
-    <div><span style="background-color: #f5c5ab"></span> 14.0</div>
-    <div><span style="background-color: #f1b093"></span> 21.0</div>
-    <div><span style="background-color: #e78662"></span> 28.0</div>
-    <div><span style="background-color: #e27149"></span> 35.0</div>
-    <div><span style="background-color: #d15e3d"></span> 42.0</div>
-    <div><span style="background-color: #b13925"></span> 49.0</div>
-    <div><span style="background-color: #a02619"></span> 56.0</div>
-    <div><span style="background-color: #7f0101"></span> 63.0</div>
-    <div><span style="background-color: #660202"></span> 70.0</div>
-  </div>
+    <div class='legend-title'>Nitric Oxide (NO): <br/>Parts per billion (ppb)</div>
+    <div class='legend-scale'>
+      <ul class='legend-labels'>
+        <li><span style='background:#ffefdc;'></span>7.0</li>
+        <li><span style='background:#f1b093;'></span>21.0</li>
+        <li><span style='background:#e27149;'></span>35.0</li>
+        <li><span style='background:#b13925;'></span>49.0</li>
+        <li><span style='background:#7f0101;'></span>63.0</li>
+      </ul>
+    </div>
   `
 
   document.getElementById('legend').innerHTML = legendContent
@@ -260,29 +294,57 @@ $('#bc-button').on('click', function(event) {
   console.log('bc button clicked');
   $(this).addClass('active');
   $('#no-button').removeClass('active');
+  $('#pm-button').removeClass('active');
   event.preventDefault();
   event.stopPropagation();
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
 
   var legendContent = `
-  <div id="legend" class="legend">
-    <p>Black Carbon: <br/>Absorbance units</p>
-    <div><span style="background-color: #ffefdc"></span> 0.2</div>
-    <div><span style="background-color: #f5c5ab"></span> 0.4</div>
-    <div><span style="background-color: #f1b093"></span> 0.6</div>
-    <div><span style="background-color: #e78662"></span> 0.8</div>
-    <div><span style="background-color: #e27149"></span> 1.0</div>
-    <div><span style="background-color: #d15e3d"></span> 1.2</div>
-    <div><span style="background-color: #b13925"></span> 1.4</div>
-    <div><span style="background-color: #a02619"></span> 1.6</div>
-    <div><span style="background-color: #7f0101"></span> 1.8</div>
-    <div><span style="background-color: #660202"></span> 2.0</div>
+  <div class='legend-title'>Black Carbon: <br/>Absorbance units</div>
+  <div class='legend-scale'>
+    <ul class='legend-labels'>
+      <li><span style='background:#ffefdc;'></span>0.2</li>
+      <li><span style='background:#f1b093;'></span>0.6</li>
+      <li><span style='background:#e27149;'></span>1.0</li>
+      <li><span style='background:#b13925;'></span>1.4</li>
+      <li><span style='background:#7f0101;'></span>1.8</li>
+    </ul>
   </div>
   `
 
   document.getElementById('legend').innerHTML = legendContent
 
   key = 'bc'; // changes concatenated value for timestamp to select correct black carbon layer
+  updateElements();
+  return key;
+})
+
+// listens to bootstrap button for particulate matter
+$('#pm-button').on('click', function(event) {
+  console.log('pm button clicked');
+  $(this).addClass('active');
+  $('#no-button').removeClass('active');
+  $('#bc-button').removeClass('active');
+  event.preventDefault();
+  event.stopPropagation();
+  map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
+
+  var legendContent = `
+  <div class='legend-title'>Particulate Matter (PM2.5): <br/>Micrograms per cubic meter of air</div>
+  <div class='legend-scale'>
+    <ul class='legend-labels'>
+      <li><span style='background:#ffefdc;'></span>6.0</li>
+      <li><span style='background:#f1b093;'></span>8.0</li>
+      <li><span style='background:#e27149;'></span>10.0</li>
+      <li><span style='background:#b13925;'></span>12.0</li>
+      <li><span style='background:#7f0101;'></span>14.0</li>
+    </ul>
+  </div>
+  `
+
+  document.getElementById('legend').innerHTML = legendContent
+
+  key = 'pm'; // changes concatenated value for timestamp to select correct black carbon layer
   updateElements();
   return key;
 })
