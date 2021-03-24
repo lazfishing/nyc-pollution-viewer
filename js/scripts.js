@@ -232,6 +232,24 @@ $('#no-button').on('click', function(event) {
   event.stopPropagation();
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
 
+  var legendContent = `
+  <div id="legend" class="legend">
+    <p>Nitric Oxide (NO): <br/>Units of parts per billion (ppb)</p>
+    <div><span style="background-color: #ffefdc"></span> 7.0</div>
+    <div><span style="background-color: #f5c5ab"></span> 14.0</div>
+    <div><span style="background-color: #f1b093"></span> 21.0</div>
+    <div><span style="background-color: #e78662"></span> 28.0</div>
+    <div><span style="background-color: #e27149"></span> 35.0</div>
+    <div><span style="background-color: #d15e3d"></span> 42.0</div>
+    <div><span style="background-color: #b13925"></span> 49.0</div>
+    <div><span style="background-color: #a02619"></span> 56.0</div>
+    <div><span style="background-color: #7f0101"></span> 63.0</div>
+    <div><span style="background-color: #660202"></span> 70.0</div>
+  </div>
+  `
+
+  document.getElementById('legend').innerHTML = legendContent
+
   key = 'no'; // changes concatenated value for timestamp to select correct nitric oxide layer
   updateElements();
   return key;
@@ -245,6 +263,24 @@ $('#bc-button').on('click', function(event) {
   event.preventDefault();
   event.stopPropagation();
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
+
+  var legendContent = `
+  <div id="legend" class="legend">
+    <p>Black Carbon: <br/>Absorbance units</p>
+    <div><span style="background-color: #ffefdc"></span> 0.2</div>
+    <div><span style="background-color: #f5c5ab"></span> 0.4</div>
+    <div><span style="background-color: #f1b093"></span> 0.6</div>
+    <div><span style="background-color: #e78662"></span> 0.8</div>
+    <div><span style="background-color: #e27149"></span> 1.0</div>
+    <div><span style="background-color: #d15e3d"></span> 1.2</div>
+    <div><span style="background-color: #b13925"></span> 1.4</div>
+    <div><span style="background-color: #a02619"></span> 1.6</div>
+    <div><span style="background-color: #7f0101"></span> 1.8</div>
+    <div><span style="background-color: #660202"></span> 2.0</div>
+  </div>
+  `
+
+  document.getElementById('legend').innerHTML = legendContent
 
   key = 'bc'; // changes concatenated value for timestamp to select correct black carbon layer
   updateElements();

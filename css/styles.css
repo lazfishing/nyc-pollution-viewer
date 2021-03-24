@@ -45,3 +45,15 @@ body {
   opacity: 0.9;
   color: black;
 }
+
+.legend {
+  padding-left:10px;
+}
+
+.legend div span {
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  margin-right: 5px;
+  width: 10px;
+}
