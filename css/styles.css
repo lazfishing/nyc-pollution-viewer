@@ -44,6 +44,7 @@ body {
   flex-grow:1;
 }
 
+/* style mapbox popup content */
 .mapboxgl-popup-content {
   border-radius: 3px;
   box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
@@ -54,6 +55,7 @@ body {
   color: black;
 }
 
+/* style legend */
 .my-legend .legend-title {
   text-align: left;
   margin-bottom: 8px;

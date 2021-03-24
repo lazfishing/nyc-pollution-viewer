@@ -162,6 +162,7 @@ map.on('style.load',function() {
     }
   });
 
+  // add hover function
   map.on('mousemove', function (e) {
 
     var features = map.queryRenderedFeatures(e.point, {
@@ -284,6 +285,7 @@ $('#no-button').on('click', function(event) {
   `
 
   document.getElementById('legend').innerHTML = legendContent
+  // initialize tooltips again
   $('[data-toggle="tooltip"]').tooltip({placement:'right'});
 
   key = 'no'; // changes concatenated value for timestamp to select correct nitric oxide layer
@@ -316,6 +318,7 @@ $('#bc-button').on('click', function(event) {
   `
 
   document.getElementById('legend').innerHTML = legendContent
+  // initialize tooltips again
   $('[data-toggle="tooltip"]').tooltip({placement:'right'});
 
   key = 'bc'; // changes concatenated value for timestamp to select correct black carbon layer
@@ -348,11 +351,13 @@ $('#pm-button').on('click', function(event) {
   `
 
   document.getElementById('legend').innerHTML = legendContent
+  // initialize tooltips again
   $('[data-toggle="tooltip"]').tooltip({placement:'right'});
 
-  key = 'pm'; // changes concatenated value for timestamp to select correct black carbon layer
+  key = 'pm'; // changes concatenated value for timestamp to select correct particulate matter layer
   updateElements();
   return key;
 })
 
+// initialize tooltips
 $('[data-toggle="tooltip"]').tooltip({placement:'right'});
