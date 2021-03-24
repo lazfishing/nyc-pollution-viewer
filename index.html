@@ -21,11 +21,32 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="#">About this map</a>
+        <a class="nav-link" href="#" data-toggle='modal' data-target='#aboutModal'><i class="fas fa-info-circle"></i> About</a>
       </li>
     </ul>
   </div>
   </nav>
+
+  <div class="modal" id="aboutModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">About the NYC Pollution Viewer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Understanding our community pollution levels gives us insight into the air we breathe everyday.<br/><br/>
+          The NYC Pollution Viewer provides five years of pollution data from the <a href='http://a816-dohbesp.nyc.gov/IndicatorPublic/Subtopic.aspx?theme_code=1,4&subtopic_id=122' target="_blank">Environment and Health Data Portal</a>,
+          for Black Carbon, Nitric Oxide and Fine Particulate Matter at the community district level.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- contains the sidebar and mapbox -->
   <div class="main-container">
@@ -33,18 +54,20 @@
       <div id='sidebarContent'>
         <h2>Mapping your community pollution levels</h2><br/>
 
+        <p>1. Select the pollutant you want to view</p>
         <div class="btn-group-vertical" role="group">
           <button type="button" class="btn btn-secondary active" id='bc-button'>Black Carbon</button>
           <button type="button" class="btn btn-secondary" id='no-button'>Nitric Oxide (NO)</button>
-          <button type="button" class="btn btn-secondary" id='pm-button'>Particulate Matter (PM2.5)</button>
+          <button type="button" class="btn btn-secondary" id='pm-button'>Fine Particulate Matter (PM2.5)</button>
         </div><br/>
 
-        <br/><p>View the pollution levels across years by dragging the slider</p>
+        <br/><p>2. View the pollution levels across years by dragging the slider</p>
         <div id="slider"></div>
-        <p>You are viewing data for: <span id='sliderValue' style="color:#66FCF1"></p>
+        <p>You are viewing data for: <span id='sliderValue' style="color:#66FCF1"></p><br/>
 
           <div class='my-legend' id='legend'>
-          <div class='legend-title'>Black Carbon: <br/>Absorbance units</div>
+          <div class='legend-title'>Black carbon is the sooty black material emitted from gas and diesel engines, coal-fired power plants, and other sources that burn fossil fuel.
+            <br/><br/>Absorbance units <i class="fas fa-info-circle" data-toggle="tooltip" title='Measurement of black carbon concentration'></i></div>
           <div class='legend-scale'>
             <ul class='legend-labels'>
               <li><span style='background:#ffefdc;'></span>0.2</li>
@@ -66,6 +89,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src="js/nouislider.js"></script>
+  <script src="https://kit.fontawesome.com/041aed469d.js" crossorigin="anonymous"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
   <script src='js/scripts.js'></script>

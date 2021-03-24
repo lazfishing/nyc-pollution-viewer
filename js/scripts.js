@@ -264,13 +264,14 @@ $('#no-button').on('click', function(event) {
   console.log('no button clicked');
   $(this).addClass('active');
   $('#bc-button').removeClass('active');
-  $('#no-button').removeClass('active');
+  $('#pm-button').removeClass('active');
   event.preventDefault();
   event.stopPropagation();
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
 
   var legendContent = `
-    <div class='legend-title'>Nitric Oxide (NO): <br/>Parts per billion (ppb)</div>
+    <div class='legend-title'>Nitric Oxide (NO) gases react to form smog and acid rain as well as being central to the formation of fine particles and ground level ozone, both of which are associated with adverse health effects.
+    <br/><br/>Atmospheric parts per billion (ppb) <i class="fas fa-info-circle" data-toggle="tooltip" title='Standard unit for concentration by volume'></i></div>
     <div class='legend-scale'>
       <ul class='legend-labels'>
         <li><span style='background:#ffefdc;'></span>7.0</li>
@@ -283,6 +284,7 @@ $('#no-button').on('click', function(event) {
   `
 
   document.getElementById('legend').innerHTML = legendContent
+  $('[data-toggle="tooltip"]').tooltip({placement:'right'});
 
   key = 'no'; // changes concatenated value for timestamp to select correct nitric oxide layer
   updateElements();
@@ -300,7 +302,8 @@ $('#bc-button').on('click', function(event) {
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
 
   var legendContent = `
-  <div class='legend-title'>Black Carbon: <br/>Absorbance units</div>
+  <div class='legend-title'>Black carbon is the sooty black material emitted from gas and diesel engines, coal-fired power plants, and other sources that burn fossil fuel.
+  <br/><br/>Absorbance units <i class="fas fa-info-circle" data-toggle="tooltip" title='Measurement of black carbon concentration'></i></div>
   <div class='legend-scale'>
     <ul class='legend-labels'>
       <li><span style='background:#ffefdc;'></span>0.2</li>
@@ -313,6 +316,7 @@ $('#bc-button').on('click', function(event) {
   `
 
   document.getElementById('legend').innerHTML = legendContent
+  $('[data-toggle="tooltip"]').tooltip({placement:'right'});
 
   key = 'bc'; // changes concatenated value for timestamp to select correct black carbon layer
   updateElements();
@@ -330,7 +334,8 @@ $('#pm-button').on('click', function(event) {
   map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
 
   var legendContent = `
-  <div class='legend-title'>Particulate Matter (PM2.5): <br/>Micrograms per cubic meter of air</div>
+  <div class='legend-title'>Particulate Matter (PM2.5) refers to particles that have diameter less than 2.5 micrometres. These particles are formed as a result of burning fuel and chemical reactions that take place in the atmosphere.
+  <br/><br/>Micrograms per cubic meter of air <i class="fas fa-info-circle" data-toggle="tooltip" title='Standard unit for concentration by weight'></i></div>
   <div class='legend-scale'>
     <ul class='legend-labels'>
       <li><span style='background:#ffefdc;'></span>6.0</li>
@@ -343,8 +348,11 @@ $('#pm-button').on('click', function(event) {
   `
 
   document.getElementById('legend').innerHTML = legendContent
+  $('[data-toggle="tooltip"]').tooltip({placement:'right'});
 
   key = 'pm'; // changes concatenated value for timestamp to select correct black carbon layer
   updateElements();
   return key;
 })
+
+$('[data-toggle="tooltip"]').tooltip({placement:'right'});
