@@ -99,7 +99,7 @@ map.on('style.load',function() {
 
       var hoveredFeature = features[0];
       var name = hoveredFeature.properties.CDname;
-      var mean = hoveredFeature.properties.Summer2012;
+      var mean = hoveredFeature.properties[currentYear];
 
       var popupContent = `
         <div>
