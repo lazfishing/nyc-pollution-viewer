@@ -29,38 +29,46 @@ var popup = new mapboxgl.Popup({
   closeOnClick: false
 });
 
-// load map the first time
+var timeSteps = ['Summer2012','Winter2012','Summer2013','Winter2013','Summer2014','Winter2014',
+                'Summer2015','Winter2015','Summer2016','Winter2016','Summer2017','Winter2017','Summer2018']
+var currentYear = 'Summer2012'
+
+// load all layers onto map first
 map.on('style.load',function() {
   map.addSource('black-carbon', {
       type: 'geojson',
       data: 'data/black-carbon.geojson'
   });
 
-  map.addLayer({
-    'id':'blackCarbonMean',
-    'type': 'fill',
-    'source': 'black-carbon',
-    'layout': {'visibility': 'visible'},
-    'paint': {
-      'fill-color':
-        ['interpolate',
-        ['linear'],
-        ['get', dataTimestamp],
-        0.2,'#ffefdc',
-        0.4,'#f5c5ab',
-        0.6,'#f1b093',
-        0.8,'#e78662',
-        1.0,'#e27149',
-        1.2,'#d15e3d',
-        1.4,'#b13925',
-        1.6,'#a02619',
-        1.8,'#7f0101',
-        2.0,'#660202'
-        ],
-      'fill-outline-color': '#ccc',
-      'fill-opacity': 0.7
-    }
-  })
+  for (i = 0; i < timeSteps.length; i++) {
+    map.addLayer({
+      'id':timeSteps[i],
+      'type': 'fill',
+      'source': 'black-carbon',
+      'layout': {'visibility': 'none'},
+      'paint': {
+        'fill-color':
+          ['interpolate',
+          ['linear'],
+          ['get', timeSteps[i]],
+          0.2,'#ffefdc',
+          0.4,'#f5c5ab',
+          0.6,'#f1b093',
+          0.8,'#e78662',
+          1.0,'#e27149',
+          1.2,'#d15e3d',
+          1.4,'#b13925',
+          1.6,'#a02619',
+          1.8,'#7f0101',
+          2.0,'#660202'
+          ],
+        'fill-outline-color': '#ccc',
+        'fill-opacity': 0.7
+      }
+    })
+  }
+
+  map.setLayoutProperty(currentYear, 'visibility', 'visible')
 
   map.addSource('highlight-feature', {
     type: 'geojson',
@@ -84,7 +92,7 @@ map.on('style.load',function() {
   map.on('mousemove', function (e) {
 
     var features = map.queryRenderedFeatures(e.point, {
-        layers: ['blackCarbonMean'],
+        layers: [currentYear],
     });
 
     if (features.length > 0) {
@@ -117,104 +125,14 @@ map.on('style.load',function() {
 
 // function to update the map once the slider value changes
 function updateElements(){
-
-  if (map.getLayer('blackCarbonMean')) {
-    map.removeLayer('blackCarbonMean');
-  }
-  if (map.getSource('black-carbon')) {
-    map.removeSource('black-carbon');
-  }
-  if (map.getLayer('highlight-line')) {
-    map.removeLayer('highlight-line');
-  }
-  if (map.getSource('highlight-feature')) {
-    map.removeSource('highlight-feature');
-  }
-
-  map.addSource('black-carbon', {
-      type: 'geojson',
-      data: 'data/black-carbon.geojson'
-  });
-
-  map.addLayer({
-    'id':'blackCarbonMean',
-    'type': 'fill',
-    'source': 'black-carbon',
-    'layout': {'visibility': 'visible'},
-    'paint': {
-      'fill-color':
-        ['interpolate',
-        ['linear'],
-        ['get', dataTimestamp],
-        0.2,'#ffefdc',
-        0.4,'#f5c5ab',
-        0.6,'#f1b093',
-        0.8,'#e78662',
-        1.0,'#e27149',
-        1.2,'#d15e3d',
-        1.4,'#b13925',
-        1.6,'#a02619',
-        1.8,'#7f0101',
-        2.0,'#660202'
-      ],
-      'fill-outline-color': '#ccc',
-      'fill-opacity': 0.7
-    }
-  })
-
-  map.addSource('highlight-feature', {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: []
-    }
-  })
-
-  map.addLayer({
-    id: 'highlight-line',
-    type: 'fill',
-    source: 'highlight-feature',
-    paint: {
-      'fill-color': '#ccc',
-      'fill-opacity': 0.7,
-      'fill-outline-color': 'white'
-    }
-  });
-
-  map.on('mousemove', function (e) {
-
-    var features = map.queryRenderedFeatures(e.point, {
-        layers: ['blackCarbonMean'],
-    });
-
-    if (features.length > 0) {
-
-      var hoveredFeature = features[0];
-      var name = hoveredFeature.properties.CDname;
-      var mean = hoveredFeature.properties[dataTimestamp];
-
-      var popupContent = `
-        <div>
-          <b>${name}</b><br/>
-          Mean Absorbance Unit: ${mean}<br/>
-        </div>
-      `
-
-      popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
-      map.getSource('highlight-feature').setData(hoveredFeature.geometry);
-      map.getCanvas().style.cursor = 'pointer';
-    } else {
-      popup.remove();
-      map.getCanvas().style.cursor = '';
-      map.getSource('highlight-feature').setData({
-            "type": "FeatureCollection",
-            "features": []
-        });
-    }
-
-  })
+  map.setLayoutProperty(currentYear, 'visibility', 'none')
+  map.setLayoutProperty(dataTimestamp, 'visibility', 'visible')
+  currentYear = dataTimestamp
 
   console.log(dataTimestamp+'B')
+  console.log(currentYear+'C')
+
+  return currentYear;
 }
 
 // add a noUiSlider
@@ -260,9 +178,10 @@ slider.noUiSlider.on('update',function (values, handle) {
   if (handle === 0) {
     sliderTimestamp = formatDateNicely(new Date(+values[handle]))
     dataTimestamp = formatDateBadly(new Date(+values[handle]))
-    dateValue.innerHTML = sliderTimestamp
-    // returns slider value into html siderbar
+    dateValue.innerHTML = sliderTimestamp // returns slider value into html siderbar
     console.log(dataTimestamp+'A')
-    updateElements()
+    if (currentYear != dataTimestamp) { // added an if-statement so that the initial state does not immediately trigger updateElements() and prevent style to stop loading
+        updateElements()
+    }
   }
 })
