@@ -31,8 +31,14 @@
   <div class="main-container">
     <div id="sidebar">
       <div id='sidebarContent'>
-        <h2>Mapping your community pollution levels</h2>
-        <p>View the pollution levels across years by dragging the slider</p>
+        <h2>Mapping your community pollution levels</h2><br/>
+
+        <div class="btn-group-vertical" role="group">
+          <button type="button" class="btn btn-secondary active" id='bc-button'>Black Carbon</button>
+          <button type="button" class="btn btn-secondary" id='no-button'>Nitric Oxide</button>
+        </div><br/>
+
+        <br/><p>View the pollution levels across years by dragging the slider</p>
         <div id="slider"></div>
         <p>You are viewing data for: <span id='sliderValue' style="color:#66FCF1"></p>
       </div>

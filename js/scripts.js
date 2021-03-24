@@ -29,20 +29,22 @@ var popup = new mapboxgl.Popup({
   closeOnClick: false
 });
 
-var timeSteps = ['Summer2012','Winter2012','Summer2013','Winter2013','Summer2014','Winter2014',
-                'Summer2015','Winter2015','Summer2016','Winter2016','Summer2017','Winter2017','Summer2018']
-var currentYear = 'Summer2012'
+var timeSteps = ['Summer2013','Winter2013','Summer2014','Winter2014','Summer2015','Winter2015','Summer2016','Winter2016','Summer2017','Winter2017','Summer2018']
+var currentYear = 'Summer2013'
+var key = 'bc'
 
 // load all layers onto map first
 map.on('style.load',function() {
+  // add black carbon data
   map.addSource('black-carbon', {
       type: 'geojson',
       data: 'data/black-carbon.geojson'
   });
 
+  // iterate through data available for all timestamps
   for (i = 0; i < timeSteps.length; i++) {
     map.addLayer({
-      'id':timeSteps[i],
+      'id':timeSteps[i].concat('bc'),
       'type': 'fill',
       'source': 'black-carbon',
       'layout': {'visibility': 'none'},
@@ -63,12 +65,47 @@ map.on('style.load',function() {
           2.0,'#660202'
           ],
         'fill-outline-color': '#ccc',
-        'fill-opacity': 0.7
+        'fill-opacity': 0.6
       }
     })
   }
 
-  map.setLayoutProperty(currentYear, 'visibility', 'visible')
+  // set one layer visible to load initial map
+  map.setLayoutProperty(currentYear.concat('bc'), 'visibility', 'visible')
+
+  // add nitric oxide data
+  map.addSource('nitric-oxide', {
+      type: 'geojson',
+      data: 'data/nitric-oxide.geojson'
+  });
+
+  for (i = 0; i < timeSteps.length; i++) {
+    map.addLayer({
+      'id':timeSteps[i].concat('no'),
+      'type': 'fill',
+      'source': 'nitric-oxide',
+      'layout': {'visibility': 'none'},
+      'paint': {
+        'fill-color':
+          ['interpolate',
+          ['linear'],
+          ['get', timeSteps[i]],
+          7,'#ffefdc',
+          14,'#f5c5ab',
+          21,'#f1b093',
+          28,'#e78662',
+          35,'#e27149',
+          42,'#d15e3d',
+          49,'#b13925',
+          56,'#a02619',
+          63,'#7f0101',
+          70,'#660202'
+          ],
+        'fill-outline-color': '#ccc',
+        'fill-opacity': 0.6
+      }
+    })
+  }
 
   map.addSource('highlight-feature', {
     type: 'geojson',
@@ -92,7 +129,7 @@ map.on('style.load',function() {
   map.on('mousemove', function (e) {
 
     var features = map.queryRenderedFeatures(e.point, {
-        layers: [currentYear],
+        layers: [currentYear.concat(key)],
     });
 
     if (features.length > 0) {
@@ -104,7 +141,7 @@ map.on('style.load',function() {
       var popupContent = `
         <div>
           <b>${name}</b><br/>
-          Mean Absorbance Unit: ${mean}<br/>
+          Average pollutant measure: ${mean}<br/>
         </div>
       `
 
@@ -125,12 +162,12 @@ map.on('style.load',function() {
 
 // function to update the map once the slider value changes
 function updateElements(){
-  map.setLayoutProperty(currentYear, 'visibility', 'none')
-  map.setLayoutProperty(dataTimestamp, 'visibility', 'visible')
+  map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
+  map.setLayoutProperty(dataTimestamp.concat(key), 'visibility', 'visible')
   currentYear = dataTimestamp
 
-  console.log(dataTimestamp+'B')
-  console.log(currentYear+'C')
+  console.log(dataTimestamp.concat(key)+'B')
+  console.log(currentYear.concat(key)+'C')
 
   return currentYear;
 }
@@ -144,9 +181,9 @@ function timestamp(str) {
 }
 
 noUiSlider.create(slider, {
-    start: [timestamp('2012-05-01')],
+    start: [timestamp('2013-05-01')],
     range: {
-        'min': timestamp('2012-05-01'),
+        'min': timestamp('2013-05-01'),
         'max': timestamp('2018-05-01')
     },
     step: 182.5*24*60*60*1000
@@ -184,4 +221,32 @@ slider.noUiSlider.on('update',function (values, handle) {
         updateElements()
     }
   }
+})
+
+// listens to bootstrap button for nitric oxide
+$('#no-button').on('click', function(event) {
+  console.log('no button clicked');
+  $(this).addClass('active');
+  $('#bc-button').removeClass('active');
+  event.preventDefault();
+  event.stopPropagation();
+  map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
+
+  key = 'no'; // changes concatenated value for timestamp to select correct nitric oxide layer
+  updateElements();
+  return key;
+})
+
+// listens to bootstrap button for black carbon
+$('#bc-button').on('click', function(event) {
+  console.log('bc button clicked');
+  $(this).addClass('active');
+  $('#no-button').removeClass('active');
+  event.preventDefault();
+  event.stopPropagation();
+  map.setLayoutProperty(currentYear.concat(key), 'visibility', 'none')
+
+  key = 'bc'; // changes concatenated value for timestamp to select correct black carbon layer
+  updateElements();
+  return key;
 })
