@@ -32,6 +32,7 @@ var popup = new mapboxgl.Popup({
 var timeSteps = ['Summer2013','Winter2013','Summer2014','Winter2014','Summer2015','Winter2015','Summer2016','Winter2016','Summer2017','Winter2017','Summer2018']
 var currentYear = 'Summer2013'
 var key = 'bc'
+var pollutantKey = {'bc':'Black Carbon','pm':'Fine Particulate Matter','no':'Nitric Oxide'}
 
 // load all layers onto map first
 map.on('style.load',function() {
@@ -178,7 +179,7 @@ map.on('style.load',function() {
       var popupContent = `
         <div>
           <b>${name}</b><br/>
-          Average pollutant measure: ${mean}<br/>
+          ${pollutantKey[key]} Levels: ${mean}<br/>
         </div>
       `
 
